@@ -15,11 +15,11 @@
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
     "gulp-less": "^3.3.0",
-    "gulp-load-plugins": "^1.5.0",
     "gulp-mem": "^0.1.0",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^2.1.2",
     "install": "^0.10.1",
+    "load-gulp-tasks": "^0.1.0",
     "npm": "^4.5.0",
     "run-sequence": "^1.2.2",
     "standard": "^10.0.2",
@@ -27,6 +27,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

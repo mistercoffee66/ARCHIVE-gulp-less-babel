@@ -1,6 +1,6 @@
 class Foo {
   constructor () {
-    console.log('foo')
+    console.log('Hello?')
   }
 }
 
