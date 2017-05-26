@@ -5,21 +5,23 @@ const GulpMem = require('gulp-mem')
 const sequence = require('run-sequence')
 
 const root = process.cwd()
-const virtualFileSystem = new GulpMem()
-const targetPath = path.join(root, 'build')
-
-const config = {
-  vfs: virtualFileSystem,
-  targetPath: targetPath,
+const dest = path.join(root, 'build')
+const gulpMem = new GulpMem()
+const options = {
+  dest: dest,
   root: root,
-  plugins: {}
+  gulpMem: gulpMem
 }
 
-virtualFileSystem.serveBasePath = targetPath
+gulpMem.serveBasePath = dest
 
-loadTasks(gulp, config)
+if (process.env.NODE_ENV !== 'production') {
+  gulp.dest = gulpMem.dest
+}
+
+loadTasks(gulp, options)
 
 gulp.task('default', (done) => {
-  sequence('html:dev', 'js:dev', 'serve:dev', 'watch')
+  sequence(['html:dev', 'js:dev', 'styles:dev'], 'serve:dev', 'watch')
   done()
 })
