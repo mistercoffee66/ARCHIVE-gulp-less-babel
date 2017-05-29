@@ -4,15 +4,15 @@ const sequence = require('run-sequence')
 
 const tasks = (gulp, options, plugins) => {
 
-  const bs = browserSync.init({
-    server: options.dest,
-    middleware: options.gulpMem.middleware
-  })
-
   const watch = plugins.watch
+  let bs
 
-  gulp.task('serve:dev', () => {
-    return bs
+  gulp.task('serve:dev', (done) => {
+    bs = browserSync.init({
+      server: options.dest,
+      middleware: options.gulpMem.middleware
+    })
+    done()
   })
 
   gulp.task('reload:styles', () => {
@@ -23,12 +23,19 @@ const tasks = (gulp, options, plugins) => {
     return bs.reload(path.join(options.dest, 'js/main.js'))
   })
 
+  gulp.task('reload:images', () => {
+    return bs.reload(path.join(options.dest, 'img/**/*.*'))
+  })
+
   gulp.task('watch', (done) => {
     watch('js/**/*.js', () => {
       sequence('js:dev', 'reload:js')
     })
     watch('styles/**/*.less', () => {
       sequence('styles:dev', 'reload:styles')
+    })
+    watch('img/**/*.*', (file) => {
+      sequence('images:dev', 'reload:images')
     })
     done()
   })
