@@ -1,5 +1,7 @@
 const path = require('path')
 const gulp = require('gulp')
+const plumber = require('gulp-plumber')
+const notify = require('gulp-notify')
 const loadTasks = require('load-gulp-tasks')
 const sequence = require('run-sequence')
 
@@ -16,6 +18,19 @@ const options = {
 if (process.env.NODE_ENV !== 'production') {
   const GulpMem = require('gulp-mem')
   const gulpMem = new GulpMem()
+  const _gulpsrc = gulp.src
+  gulp.src = (...args) => {
+    return _gulpsrc.apply(gulp, args)
+    .pipe(plumber({
+      errorHandler: (err) => {
+        notify.onError({
+          title: 'Gulp Error',
+          message: 'Error: <%= error.message %>'
+        })(err)
+        this.emit('end')
+      }
+    }))
+  }
   gulpMem.serveBasePath = dest
   gulpMem.enableLog = false
   options.gulpMem = gulpMem
